@@ -370,7 +370,7 @@
   <main>
 
     <header>
-      <span class="site-label">Essay — March 2026</span>
+      <span class="site-label">Essay </span>
       <h1>ما تراه ليس حربًا</h1>
       <p class="subtitle">قراءة في بنية القوة العالمية وانتقال الشرق الأوسط</p>
       <p class="date">مارس ٢٠٢٦</p>
@@ -594,14 +594,12 @@
     <hr class="divider" />
 
     <section>
-      <h2>الخلاصة</h2>
-      <p>المال لم يتوقف. غيّر اتجاهه فقط.</p>
-      <p>صناعة الدفاع انتقلت من بيع صواريخ إلى بيع عقود إعمار. الخليج ضخّ استثماراته في منطقته. إيران دخلت كشريك طاقة. وإسرائيل حصلت على صورة نصر.</p>
-      <p>الخاسر الوحيد هو من صدّق الشعارات: الميليشيات التي استُنزفت تحت عنوان المقاومة، والشعوب التي رهنت مستقبلها على خطاب ثوري كان يُدار طوال الوقت كبيزنس.</p>
-      <blockquote>
-        <p>الحرب كانت الإعلان. النظام الجديد هو المنتج.</p>
-      </blockquote>
-      <p>هذه قراءة تتبع المصالح والحوافز. الأمور يمكن أن تخرج عن السيطرة في أي لحظة. لكن من يقرأ الأنماط يرى صورة مختلفة تمامًا عما تعرضه نشرات الأخبار.</p>
+      <h2>ختامًا</h2>
+      <p>ما ظهر على مسرح الحرب لم يكن صراعًا تقليديًا على البقاء بقدر ما كان مرحلة عنيفة من إعادة ترتيب المنطقة.</p>
+      <p>فصل البارود لم ينته تمامًا، لكنه لم يعد وحده ما يحكم المشهد. الذي يتقدم الآن منطق آخر: الطاقة، والممرات، والاستثمار، وإعادة تعريف من يملك حق ضبط الاستقرار وفرض شكله.</p>
+      <p>الحرب كانت تمهيدًا لمرحلة أبرد وأكثر حسابًا. مرحلة يتراجع فيها وزن السلاح المفتوح لمصلحة المال، وتتحول فيها بعض القوى من دور التعبئة والصدام إلى دور التموضع داخل نظام جديد.</p>
+      <p>هذا النظام لن يكون أكثر عدلًا. لكنه سيكون أكثر ارتباطًا بالعقود، والمشاريع، والربط الإقليمي، وأقل اعتمادًا على الفوضى التي حكمت المنطقة طويلًا.</p>
+      <p>الشرق الأوسط يدخل زمنًا مختلفًا: زمن الاستقرار المدار. ليس نهاية الصراع، بل نهاية صيغته القديمة.</p>
     </section>
 
     <footer>
@@ -644,38 +642,44 @@
     // Close on Escape key
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeGlossary(); });
 
-    // Search
+    // Search — backup/restore approach (reliable with Arabic DOM)
     const input   = document.getElementById('search-input');
     const countEl = document.getElementById('search-count');
     let hits = [], cur = 0, timer;
+    const mainEl = document.querySelector('main');
+
+    // Snapshot clean HTML once on load
+    let originalHTML = '';
+    window.addEventListener('DOMContentLoaded', () => { originalHTML = mainEl.innerHTML; });
+    // Fallback if DOMContentLoaded already fired
+    if (document.readyState !== 'loading') originalHTML = mainEl.innerHTML;
 
     function clearHL() {
-      document.querySelectorAll('mark.search-hit').forEach(m => {
-        m.parentNode.replaceChild(document.createTextNode(m.textContent), m);
-        m.parentNode.normalize();
-      });
+      mainEl.innerHTML = originalHTML;   // full restore — no broken nodes
       hits = []; cur = 0; countEl.textContent = '';
     }
 
     function doSearch(q) {
       clearHL();
       if (!q.trim()) return;
-      const re = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'), 'gi');
-      const walker = document.createTreeWalker(
-        document.querySelector('main'), NodeFilter.SHOW_TEXT,
-        { acceptNode: n => n.parentElement.closest('#topbar, .glossary-overlay') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT }
-      );
+
+      const re = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+
+      // Walk text nodes of restored main
+      const walker = document.createTreeWalker(mainEl, NodeFilter.SHOW_TEXT);
       const nodes = [];
       while (walker.nextNode()) nodes.push(walker.currentNode);
 
       nodes.forEach(node => {
-        if (!re.test(node.textContent)) return;
+        const text = node.textContent;
         re.lastIndex = 0;
+        if (!re.test(text)) return;
+        re.lastIndex = 0;
+
         const frag = document.createDocumentFragment();
         let last = 0, m;
-        const text = node.textContent;
         while ((m = re.exec(text)) !== null) {
-          frag.appendChild(document.createTextNode(text.slice(last, m.index)));
+          if (m.index > last) frag.appendChild(document.createTextNode(text.slice(last, m.index)));
           const mark = document.createElement('mark');
           mark.className = 'search-hit';
           mark.textContent = m[0];
@@ -683,7 +687,7 @@
           hits.push(mark);
           last = re.lastIndex;
         }
-        frag.appendChild(document.createTextNode(text.slice(last)));
+        if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
         node.parentNode.replaceChild(frag, node);
       });
 
