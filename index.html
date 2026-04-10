@@ -113,34 +113,35 @@
       flex-shrink: 0;
     }
     .toggle-label {
-      font-size: 0.72rem;
-      color: var(--muted);
+      font-size: 0.86rem;
+      color: #3a2411;
       font-weight: 500;
       white-space: nowrap;
-    }
+    }  
     .toggle-track {
-      width: 2.35rem;
-      height: 1.15rem;
-      border-radius: 999px;
-      background-color: var(--toggle-track);
-      position: relative;
-      transition: background-color 0.3s;
-      flex-shrink: 0;
+   width: 2.35rem;
+   height: 1.15rem;
+   border-radius: 999px;
+   border: 2px solid #1a1a1a;
+   background-color: #fff;
+   position: relative;
+   transition: background-color 0.3s;
+   flex-shrink: 0;
     }
-    .toggle-track.on { background-color: var(--toggle-active); }
+    .toggle-track.on { background-color: #fff; }
     .toggle-thumb {
-      position: absolute;
-      top: 0.13rem;
-      right: 0.13rem;
-      width: 0.92rem;
-      height: 0.92rem;
-      border-radius: 50%;
-      background: #fff;
-      transition: transform 0.28s, background 0.35s;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.22);
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 0.86rem;
+  height: 0.86rem;
+  border-radius: 50%;
+  background: #111;
+  transition: transform 0.28s, background 0.35s;
+  box-shadow: none;
     }
-    .dark .toggle-thumb { background: #1c1c1a; }
-    .toggle-track.on .toggle-thumb { transform: translateX(-1.3rem); }
+    .dark .toggle-thumb { background: #111; }
+    .toggle-track.on .toggle-thumb { transform: translateX(-1.05rem); }
 
     /* ── Search ── */
     .search-wrap { flex-shrink: 0; }
