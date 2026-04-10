@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;900&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #edf3f6;
+      --bg: #dce9f0;
       --fg: #261a0b;
       --muted: #7a6a52;
       --rule: #c2d0d6;
@@ -18,9 +18,9 @@
       --search-bg: #f5f9fb;
       --search-border: #c2d0d6;
       --toggle-track: #bccbd2;
-      --toggle-active: #261a0b;
+      --toggle-active: #1a1a1a;
       --highlight: #cce0ea;
-      --topbar-bg: #edf3f6;
+      --topbar-bg: #dce9f0;
     }
     .dark {
       --bg: #0f0f0d;
@@ -68,7 +68,6 @@
       top: 2px; left: 0; right: 0;
       z-index: 400;
       background-color: var(--topbar-bg);
-      /* NO border-bottom */
       padding: 0.65rem 1.8rem;
       transition: background-color 0.35s,
                   transform 0.3s cubic-bezier(0.4,0,0.2,1),
@@ -79,7 +78,7 @@
       opacity: 0;
     }
 
-    /* Desktop layout: search left | logo center | toggle right */
+    /* ── Desktop layout: search+toggle left | logo center | (empty) right ── */
     #topbar-inner {
       display: grid;
       grid-template-columns: 1fr auto 1fr;
@@ -90,21 +89,46 @@
     }
     .topbar-left  { display: flex; align-items: center; justify-content: flex-start; gap: 0.7rem; }
     .topbar-mid   { display: flex; align-items: center; justify-content: center; }
-    .topbar-right { display: flex; align-items: center; justify-content: flex-end; gap: 0.8rem; }
+    .topbar-right { display: flex; align-items: center; justify-content: flex-end; }
 
-/* Logo */
-.logo-img {
-  height: 40px;
-  width: auto;
-  display: block;
-  transition: opacity 0.2s;
-}
+    /* ── Logo ── */
+    .logo-img {
+      height: 40px;
+      width: auto;
+      display: block;
+      transition: opacity 0.2s;
+    }
+    .dark .logo-img {
+      filter: invert(1) brightness(0.9);
+    }
+    /* logo-mobile hidden on desktop */
+    .logo-mobile { display: none; }
 
-.dark .logo-img {
-  filter: invert(1) brightness(0.9);
-}
+    /* ── Hamburger (mobile only, hidden on desktop) ── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 5px;
+      width: 22px;
+      height: 22px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+    }
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background-color: var(--fg);
+      border-radius: 2px;
+      transition: background-color 0.35s;
+    }
 
-    /* Toggle */
+    /* ── Toggle ── */
     .toggle-wrap {
       display: flex;
       align-items: center;
@@ -119,7 +143,8 @@
       white-space: nowrap;
     }
     .toggle-track {
-      width: 2.2rem; height: 1.2rem;
+      width: 40px;
+      height: 22px;
       border-radius: 999px;
       background-color: var(--toggle-track);
       position: relative;
@@ -129,17 +154,19 @@
     .toggle-track.on { background-color: var(--toggle-active); }
     .toggle-thumb {
       position: absolute;
-      top: 0.12rem; right: 0.12rem;
-      width: 0.96rem; height: 0.96rem;
+      top: 3px;
+      right: 3px;
+      width: 16px;
+      height: 16px;
       border-radius: 50%;
       background: #fff;
       transition: transform 0.28s, background 0.35s;
       box-shadow: 0 1px 3px rgba(0,0,0,0.22);
     }
     .dark .toggle-thumb { background: #1c1c1a; }
-    .toggle-track.on .toggle-thumb { transform: translateX(-1rem); }
+    .toggle-track.on .toggle-thumb { transform: translateX(-18px); }
 
-    /* Search */
+    /* ── Search ── */
     .search-wrap { max-width: 200px; }
     #search-input {
       width: 100%;
@@ -180,51 +207,51 @@
       border-radius: 10px;
     }
 
-/* ── Header ── */
-header {
-  margin-bottom: 2.2rem;
-  text-align: center;
-}
+    /* ── Header ── */
+    header {
+      margin-bottom: 1.6rem;
+      text-align: center;
+    }
 
-h1 {
-  font-size: 4rem;
-  font-weight: 900;
-  line-height: 1.15;
-  margin-bottom: 0.7rem;
-}
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 0.45rem;
+    }
 
-.subtitle {
-  font-size: 1.15rem;
-  font-weight: 400;
-  line-height: 1.9;
-  margin-bottom: 1.2rem;
-}
+    .subtitle {
+      font-size: 1.05rem;
+      font-weight: 400;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
 
-/* ── Article meta ── */
-.article-meta {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1.35rem;
-  flex-wrap: wrap;
-  direction: rtl;
-}
-.meta-item {
-  display: flex;
-  align-items: center;
-  gap: 0.38rem;
-  font-size: 0.9rem;
-  color: var(--muted);
-  font-weight: 400;
-}
-.meta-item svg {
-  width: 14px;
-  height: 14px;
-  stroke: var(--muted);
-  fill: none;
-  flex-shrink: 0;
-  opacity: 0.75;
-}
+    /* ── Article meta ── */
+    .article-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+      direction: rtl;
+    }
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-weight: 400;
+    }
+    .meta-item svg {
+      width: 13px; height: 13px;
+      stroke: var(--muted);
+      fill: none;
+      flex-shrink: 0;
+      opacity: 0.75;
+    }
 
     /* ── Content styles ── */
     hr.divider { border: none; border-top: 1px solid var(--rule); margin: 2.6rem 0; }
@@ -266,384 +293,51 @@ h1 {
     .x-link svg { width: 13px; height: 13px; fill: var(--muted); transition: fill 0.35s; }
 
     /* ── Mobile ── */
-    .menu-btn{display:none;width:32px;height:24px;padding:0;border:0;background:transparent;cursor:pointer;flex-direction:column;justify-content:center;gap:6px}.menu-btn span{display:block;width:28px;height:3px;background:var(--fg);border-radius:2px}
-   @media (max-width: 600px){
-  html{font-size:15px}
-  #topbar{padding:.85rem 1rem}
-  #topbar-inner{position:relative;display:flex;align-items:center;justify-content:space-between;min-height:52px}
-  .search-wrap{display:none!important}.menu-btn{display:flex}
-  .topbar-left{display:flex;align-items:center;justify-content:flex-start;flex:0 0 44px}
-  .topbar-mid{position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center;justify-content:center}
-  .topbar-right{display:flex;align-items:center;justify-content:flex-end;flex:0 0 auto}
-  #topbar-mid-logo{display:none!important}.logo-mobile{display:block!important;height:56px;width:auto}
-  .toggle-wrap{gap:.55rem}.toggle-label{display:inline-block;font-size:1rem;color:var(--fg);font-weight:500}
-  .toggle-track{width:44px;height:24px;border:2px solid var(--fg);background:transparent}.toggle-track.on{background:transparent}
-  .toggle-thumb{width:16px;height:16px;top:2px;right:2px;background:var(--fg);box-shadow:none}.dark .toggle-thumb{background:var(--fg)}
-  .toggle-track.on .toggle-thumb{transform:translateX(-20px)}
-}
-      /* Mobile topbar: search left | toggle center-right | logo RIGHT */
+    @media (max-width: 600px) {
+      html { font-size: 15px; }
+      main { padding: 4.6rem 1.3rem 8rem; }
+      h1 { font-size: 1.7rem; }
+
+      /* Mobile topbar: hamburger left | toggle center | logo right */
       #topbar { padding: 0.55rem 1rem; }
+
       #topbar-inner {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        gap: 0.6rem;
+        gap: 0;
+        position: relative;
       }
-      .topbar-left  { flex: 1; justify-content: flex-start; }
-      .topbar-mid   { flex-shrink: 0; }
+
+      /* Left: show hamburger only */
+      .topbar-left {
+        flex-shrink: 0;
+        gap: 0;
+      }
+      .hamburger { display: flex; }
+      .search-wrap { display: none; }
+      /* Hide toggle from left on mobile (it will be centered absolutely) */
+      .topbar-left .toggle-wrap { display: none; }
+
+      /* Center: hide desktop logo */
+      .topbar-mid { display: none; }
+
+      /* Toggle: centered absolutely in topbar */
+      #toggle-center {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      /* Right: show mobile logo */
       .topbar-right { flex-shrink: 0; }
-      .search-wrap  { max-width: 130px; }
-      .toggle-label { display: none; }
+      .logo-mobile { display: block; }
     }
-  /* ============================================================
-   مآلات — تحديثات مطابقة لتصميم Cinema Meem
-   يُضاف هذا الكود في قسم Code Injection أو Custom CSS
-   ============================================================ */
-
-
-/* =========================================================
-   1. لون الخلفية — مطابق لـ Cinema Meem
-   ========================================================= */
-
-body,
-html,
-.site-wrapper,
-.gh-viewport,
-.viewport,
-main,
-.site-main,
-.site-content,
-.post-feed,
-.gh-feed {
-  background-color: #dce9f0 !important;
-}
-
-.gh-head,
-header,
-.site-header,
-nav {
-  background-color: #dce9f0 !important;
-}
-
-
-/* =========================================================
-   2. الهيدر — سطح المكتب
-   مطابق لـ Cinema Meem: [toggle+بحث يسار | لوقو وسط | روابط يمين]
-   ========================================================= */
-
-@media (min-width: 768px) {
-
-  .gh-head,
-  .site-header,
-  header.header {
-    display: grid !important;
-    grid-template-columns: 1fr auto 1fr !important;
-    align-items: center !important;
-    padding: 0 32px !important;
-    height: 72px !important;
-    position: relative !important;
-  }
-
-  /* اليسار: الوضع الليلي + البحث */
-  .gh-head-actions,
-  .header-left,
-  .site-header__actions {
-    display: flex !important;
-    align-items: center !important;
-    gap: 16px !important;
-    justify-content: flex-start !important;
-    grid-column: 1 !important;
-  }
-
-  /* الوسط: اللوقو */
-  .gh-head-logo,
-  .site-logo,
-  .header-logo,
-  .site-header__logo {
-    grid-column: 2 !important;
-    text-align: center !important;
-    font-size: 20px !important;
-    line-height: 1 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-  }
-
-  /* اليمين: الروابط */
-  .gh-head-menu,
-  .site-nav,
-  .header-nav,
-  nav.navigation {
-    grid-column: 3 !important;
-    display: flex !important;
-    justify-content: flex-end !important;
-    align-items: center !important;
-  }
-
-  /* إخفاء الهامبرغر على الكمبيوتر */
-  .gh-burger,
-  .hamburger,
-  .nav-toggle,
-  .menu-toggle {
-    display: none !important;
-  }
-
-  /* البحث — سطح المكتب */
-  .gh-search,
-  .search-form,
-  input[type="search"],
-  .search-input {
-    height: 36px !important;
-    border-radius: 6px !important;
-    border: 1px solid #c0d0da !important;
-    padding: 0 12px !important;
-    font-size: 14px !important;
-    background-color: rgba(255,255,255,0.5) !important;
-    min-width: 160px !important;
-  }
-}
-
-
-/* =========================================================
-   3. الهيدر — الجوال
-   مطابق لـ Cinema Meem:
-   [☰ هامبرغر يسار | الوضع الليلي وسط | لوقو يمين]
-   ========================================================= */
-
-@media (max-width: 767px) {
-
-  .gh-head,
-  .site-header,
-  header.header {
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    padding: 0 16px !important;
-    height: 60px !important;
-    background-color: #dce9f0 !important;
-  }
-
-  /* يسار: الهامبرغر */
-  .gh-burger,
-  .hamburger,
-  .nav-toggle,
-  .menu-toggle {
-    order: 1 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: center !important;
-    gap: 5px !important;
-    width: 22px !important;
-    height: 22px !important;
-    cursor: pointer !important;
-    background: none !important;
-    border: none !important;
-    padding: 0 !important;
-  }
-
-  /* خطوط الهامبرغر — مطابقة لـ Cinema Meem */
-  .gh-burger span,
-  .hamburger span,
-  .nav-toggle span,
-  .menu-toggle span,
-  .gh-burger .line,
-  .hamburger-line {
-    display: block !important;
-    width: 22px !important;
-    height: 2px !important;
-    background-color: #1a1a1a !important;
-    border-radius: 2px !important;
-    transition: all 0.25s ease !important;
-  }
-
-  /* إذا كان الهامبرغر يستخدم ::before و ::after */
-  .gh-burger::before,
-  .gh-burger::after,
-  .hamburger::before,
-  .hamburger::after {
-    content: "" !important;
-    display: block !important;
-    width: 22px !important;
-    height: 2px !important;
-    background-color: #1a1a1a !important;
-    border-radius: 2px !important;
-  }
-
-  /* وسط: الوضع الليلي */
-  .gh-head-actions,
-  .header-actions,
-  .dark-mode-wrapper,
-  .toggle-wrapper {
-    order: 2 !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 8px !important;
-  }
-
-  /* نص "الوضع الليلي" */
-  .dark-mode-label,
-  .toggle-label,
-  [class*="dark-mode"] label,
-  [class*="toggle"] label {
-    font-size: 13px !important;
-    color: #1a1a1a !important;
-    white-space: nowrap !important;
-  }
-
-  /* يمين: اللوقو */
-  .gh-head-logo,
-  .site-logo,
-  .header-logo {
-    order: 3 !important;
-    font-size: 18px !important;
-  }
-
-  /* إخفاء الروابط في الجوال */
-  .gh-head-menu,
-  .site-nav,
-  nav.navigation {
-    display: none !important;
-  }
-
-  /* البحث — مخفي في الجوال (مثل Cinema Meem) */
-  .gh-search-wrapper,
-  .search-form:not(.mobile-search) {
-    display: none !important;
-  }
-}
-
-
-/* =========================================================
-   4. زر الوضع الليلي (Toggle)
-   مطابق حرفياً لـ Cinema Meem — أسود عند التفعيل
-   ========================================================= */
-
-/* الحاوية الرئيسية للزر */
-.dark-mode-toggle,
-.theme-toggle,
-.toggle-switch,
-[class*="dark-toggle"],
-[class*="mode-toggle"] {
-  position: relative !important;
-  display: inline-block !important;
-  width: 40px !important;
-  height: 22px !important;
-  flex-shrink: 0 !important;
-}
-
-/* إخفاء الـ input الأصلي */
-.dark-mode-toggle input[type="checkbox"],
-.theme-toggle input[type="checkbox"],
-.toggle-switch input[type="checkbox"] {
-  opacity: 0 !important;
-  width: 0 !important;
-  height: 0 !important;
-  position: absolute !important;
-}
-
-/* المسار (Track) — الخلفية */
-.dark-mode-toggle .slider,
-.dark-mode-toggle .track,
-.theme-toggle .slider,
-.theme-toggle .track,
-.toggle-track,
-.toggle-bg {
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  background-color: #b0bec5 !important;
-  border-radius: 22px !important;
-  transition: background-color 0.25s ease !important;
-  cursor: pointer !important;
-}
-
-/* الدائرة (Thumb) */
-.dark-mode-toggle .slider::before,
-.dark-mode-toggle .track::before,
-.theme-toggle .slider::before,
-.theme-toggle .track::before,
-.toggle-track::before,
-.toggle-thumb {
-  content: "" !important;
-  position: absolute !important;
-  height: 16px !important;
-  width: 16px !important;
-  left: 3px !important;
-  bottom: 3px !important;
-  background-color: #ffffff !important;
-  border-radius: 50% !important;
-  transition: transform 0.25s ease !important;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2) !important;
-}
-
-/* عند التفعيل — المسار يصبح أسود */
-.dark-mode-toggle input:checked + .slider,
-.dark-mode-toggle input:checked + .track,
-.theme-toggle input:checked + .slider,
-.theme-toggle input:checked + .track,
-input:checked + .toggle-track {
-  background-color: #1a1a1a !important;
-}
-
-/* عند التفعيل — الدائرة تنزلق لليمين */
-.dark-mode-toggle input:checked + .slider::before,
-.dark-mode-toggle input:checked + .track::before,
-.theme-toggle input:checked + .slider::before,
-.theme-toggle input:checked + .track::before,
-input:checked + .toggle-track::before {
-  transform: translateX(18px) !important;
-}
-
-/* دعم إضافي للـ toggle بدون input (CSS class based) */
-.toggle-switch.active .toggle-track,
-.toggle-switch.is-active .toggle-track {
-  background-color: #1a1a1a !important;
-}
-
-.toggle-switch.active .toggle-thumb,
-.toggle-switch.is-active .toggle-thumb {
-  transform: translateX(18px) !important;
-}
-
-
-/* =========================================================
-   5. حجم العنوان — تصغير "ما تراه ليس حرباً"
-   ========================================================= */
-
-/* سطح المكتب */
-@media (min-width: 768px) {
-  h1.post-full-title,
-  h1.gh-article-title,
-  h1.article-title,
-  h1.post-title,
-  .gh-article-header h1,
-  .post-header h1,
-  article header h1,
-  .article-header h1 {
-    font-size: 2.6rem !important;
-    line-height: 1.3 !important;
-    max-width: 800px !important;
-    margin-inline: auto !important;
-  }
-}
-
-/* الجوال */
-@media (max-width: 767px) {
-  h1.post-full-title,
-  h1.gh-article-title,
-  h1.article-title,
-  h1.post-title,
-  .gh-article-header h1,
-  .post-header h1,
-  article header h1,
-  .article-header h1 {
-    font-size: 1.9rem !important;
-    line-height: 1.35 !important;
-  }
-}
   </style>
 </head>
 <body class="dark">
@@ -653,35 +347,41 @@ input:checked + .toggle-track::before {
   <div id="topbar">
     <div id="topbar-inner">
 
-<!-- Desktop: left = search + menu | Mobile: left = menu -->
-<div class="topbar-left">
-  <button class="menu-btn" type="button" aria-label="القائمة">
-    <span></span>
-    <span></span>
-  </button>
-
-  <div class="search-wrap">
-    <input type="text" id="search-input" placeholder="ابحث هنا .." autocomplete="off" />
-    <div id="search-count"></div>
-  </div>
-</div>
-
-      <!-- Desktop: center = logo | Mobile: center = toggle -->
-      <div class="topbar-mid" id="topbar-mid-logo">
-        <img class="logo-img" src="malat.png" alt="مآلات" />
-      </div>
-
-      <!-- Desktop: right = toggle | Mobile: right = logo -->
-      <div class="topbar-right">
+      <!-- Left: search + toggle (desktop) | hamburger (mobile) -->
+      <div class="topbar-left">
+        <button class="hamburger" aria-label="القائمة">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <div class="search-wrap">
+          <input type="text" id="search-input" placeholder="ابحث هنا .." autocomplete="off" />
+          <div id="search-count"></div>
+        </div>
         <div class="toggle-wrap" onclick="toggleDark()">
           <div class="toggle-track on" id="toggle-track">
             <div class="toggle-thumb"></div>
           </div>
           <span class="toggle-label">الوضع الليلي</span>
         </div>
-        <!-- Logo shown on mobile (right side) -->
-        <img class="logo-img logo-mobile" src="malat.png" alt="مآلات"
-             style="display:none;" />
+      </div>
+
+      <!-- Center: logo (desktop) -->
+      <div class="topbar-mid">
+        <img class="logo-img" src="malat.png" alt="مآلات" />
+      </div>
+
+      <!-- Toggle centered (mobile only) -->
+      <div id="toggle-center" onclick="toggleDark()">
+        <div class="toggle-track on" id="toggle-track-mobile">
+          <div class="toggle-thumb"></div>
+        </div>
+        <span class="toggle-label">الوضع الليلي</span>
+      </div>
+
+      <!-- Right: logo (mobile) -->
+      <div class="topbar-right">
+        <img class="logo-img logo-mobile" src="malat.png" alt="مآلات" />
       </div>
 
     </div>
@@ -1017,21 +717,14 @@ input:checked + .toggle-track::before {
   </main>
 
   <script>
-    /* ── Responsive logo swap ── */
-    function applyLogoLayout() {
-      const isMobile = window.innerWidth <= 600;
-      document.getElementById('topbar-mid-logo').style.display = isMobile ? 'none' : 'flex';
-      document.querySelector('.logo-mobile').style.display = isMobile ? 'block' : 'none';
-    }
-    applyLogoLayout();
-    window.addEventListener('resize', applyLogoLayout);
-
     /* ── Dark Mode (starts ON) ── */
     let dark = true;
     function toggleDark() {
       dark = !dark;
       document.body.classList.toggle('dark', dark);
+      // Sync both toggle tracks
       document.getElementById('toggle-track').classList.toggle('on', dark);
+      document.getElementById('toggle-track-mobile').classList.toggle('on', dark);
     }
 
     /* ── Progress bar + topbar hide ── */
