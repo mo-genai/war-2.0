@@ -4,309 +4,409 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ما تراه ليس حربًا — مآلات</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=Noto+Sans+Arabic:wght@400;500;700;900&display=swap" rel="stylesheet" />
 
   <style>
-    /* ── إخفاء الصفحة أثناء التحميل لمنع الوميض ── */
-    body.hidden { visibility: hidden; opacity: 0; }
-    body { transition: opacity 0.3s ease, visibility 0.3s ease; }
-  </style>
-
-  <script>
-    /* تطبيق الوضع الليلي قبل رسم الصفحة */
-    (function () {
-      var body = document.body || document.documentElement;
-      body.classList.add('hidden');
-      if (localStorage.getItem('darkMode') === 'enabled') {
-        document.documentElement.classList.add('dark-mode-preload');
-      }
-    })();
-  </script>
-
-  <style>
-    /* ══════════════════════════════════════
-       المتغيرات
-    ══════════════════════════════════════ */
     :root {
-      --bg:               #edf3f6;
-      --fg:               #261a0b;
-      --muted:            #7a6a52;
-      --rule:             #c2d0d6;
-      --blockquote-bg:    #e2edf1;
-      --blockquote-border:#a8bec8;
-      --search-bg:        #f5f9fb;
-      --search-border:    #c2d0d6;
-      --highlight:        #cce0ea;
-      --topbar-bg:        #edf3f6;
-    }
-    .dark-mode {
-      --bg:               #0f0f0d;
-      --fg:               #e8e3d8;
-      --muted:            #8a8278;
-      --rule:             #2a2a26;
-      --blockquote-bg:    #161612;
-      --blockquote-border:#3a3a34;
-      --search-bg:        #1a1a16;
-      --search-border:    #2e2e28;
-      --highlight:        #2e2e22;
-      --topbar-bg:        #0f0f0d;
-    }
-    /* تطبيق مبكر لمنع الوميض */
-    html.dark-mode-preload body,
-    html.dark-mode-preload #topbar {
-      background-color: #0f0f0d !important;
+      --white: #f4fafb;
+      --black: #121212;
+      --goldish: #2c1f00;
+      --whitesh: #e2f9fd;
+      --grey: #f6f6f6;
+      --card-dark: #1c170e;
+
+      --theme-bg: var(--white);
+      --theme-text: var(--goldish);
+      --theme-link: #1912ff;
+      --theme-card-bg: #ffffff;
+      --theme-card-border: rgba(44, 31, 0, 0);
+      --theme-card-border-hover: #2c1f00;
+      --theme-blog-bg: #ffffff;
+      --theme-toggle-shift: 0%;
+      --radius: 0.375rem;
+
+      --muted: rgba(44, 31, 0, 0.68);
+      --rule: rgba(44, 31, 0, 0.14);
+      --search-bg: transparent;
+      --highlight: rgba(44, 31, 0, 0.12);
+      --topbar-shadow: 0 0 0 rgba(0,0,0,0);
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { font-size: 17px; scroll-behavior: smooth; }
+    body.dark {
+      --theme-bg: var(--black);
+      --theme-text: var(--whitesh);
+      --theme-link: #9b98f6;
+      --theme-card-bg: var(--card-dark);
+      --theme-card-border: rgba(244, 250, 251, 0.15);
+      --theme-card-border-hover: rgba(244, 250, 251, 0.2);
+      --theme-blog-bg: var(--goldish);
+      --theme-toggle-shift: 110%;
+
+      --muted: rgba(226, 249, 253, 0.68);
+      --rule: rgba(226, 249, 253, 0.16);
+      --search-bg: transparent;
+      --highlight: rgba(226, 249, 253, 0.14);
+      --topbar-shadow: 0 18px 40px rgba(0,0,0,0.18);
+    }
+
+    * , *::before , *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      font-size: calc(0.7416576964rem + 0.215285253vw);
+      scroll-behavior: smooth;
+    }
+
+    @media screen and (max-width: 1920px) {
+      html {
+        font-size: calc(0.7416576964rem + 0.215285253vw);
+      }
+    }
+
+    @media screen and (max-width: 991px) {
+      html {
+        font-size: 1rem;
+      }
+    }
+
+    @media screen and (max-width: 479px) {
+      html {
+        font-size: 1rem;
+      }
+    }
 
     body {
-      background-color: var(--bg);
-      color: var(--fg);
-      font-family: 'Noto Sans Arabic', sans-serif;
-      font-weight: 400;
-      transition: background-color 0.3s ease, color 0.3s ease;
+      margin: 0;
       min-height: 100vh;
+      background: var(--theme-bg);
+      color: var(--theme-text);
+      font-family: "IBM Plex Sans Arabic", "Noto Sans Arabic", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      transition: background-color 0.28s ease, color 0.28s ease;
     }
 
-    /* ══════════════════════════════════════
-       شريط التنقل — هيكل ميم الدقيق
-    ══════════════════════════════════════ */
-    #topbar {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 400;
-      background-color: var(--topbar-bg);
-      transition: background-color 0.3s ease;
-      /* لا يخفي عند التمرير — مطابق لميم */
+    img {
+      max-width: 100%;
+      display: block;
     }
 
-    /* المحتوى الداخلي للشريط */
-    #topbar-inner {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 0 2rem;
-      height: 68px;          /* ارتفاع الشريط كميم */
+    a,
+    button,
+    input {
+      font: inherit;
     }
 
-    /* ── الجانب الأيمن: روابط التنقل (فارغة في مآلات) ── */
-    .navbar_links {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      /* في مآلات لا توجد روابط حاليًا — نبقي المساحة */
-      min-width: 0;
-      flex: 1;
-    }
-    .navbar_link {
-      font-size: 0.82rem;
-      font-weight: 400;
-      color: var(--fg);
+    a {
+      color: inherit;
       text-decoration: none;
-      opacity: 0.75;
-      transition: opacity 0.2s;
     }
-    .navbar_link:hover { opacity: 1; }
 
-    /* ── الوسط: اللوجو ── */
-    .navbar_logo {
-      flex-shrink: 0;
+    .page-wrapper {
+      min-height: 100vh;
+      position: relative;
+    }
+
+    .padding-global {
+      padding-inline: 2rem;
+    }
+
+    .container-large {
+      width: 100%;
+      max-width: 72rem;
+      margin-inline: auto;
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 500;
+      background: color-mix(in srgb, var(--theme-bg) 92%, transparent);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: var(--topbar-shadow);
+      transition: background-color 0.28s ease, box-shadow 0.28s ease;
+    }
+
+    .nav-container {
+      position: relative;
+    }
+
+    .navbar_wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding-top: 1rem;
+      padding-bottom: 1.5rem;
+    }
+
+    .navbar_menu-wrapper {
       display: flex;
       align-items: center;
       justify-content: center;
+      gap: 1rem;
+      min-width: 14rem;
+      flex: 1 1 0;
     }
-    .logo-img {
-      height: 48px;          /* مطابق لحجم لوجو ميم على الديسكتوب */
-      width: auto;
-      display: block;
-      transition: opacity 0.2s;
-    }
-    .dark-mode .logo-img { filter: invert(1) brightness(0.9); }
 
-    /* ── الجانب الأيسر: أدوات (بحث + تبديل + همبرجر) ── */
+    .navbar_link {
+      color: var(--theme-text);
+      font-size: 0.875rem;
+      font-weight: 400;
+      line-height: 1;
+      white-space: nowrap;
+      opacity: 0.92;
+      transition: opacity 0.2s ease;
+    }
+
+    .navbar_link:hover {
+      opacity: 1;
+    }
+
+    .navbar_logo-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+    }
+
+    .navbar_logo {
+      width: 4rem;
+      color: var(--theme-text);
+    }
+
+    .navbar_logo img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      filter: none;
+    }
+
+    body.dark .navbar_logo img {
+      filter: brightness(1.08) contrast(1.02);
+    }
+
     .navbar_tools-wrapper {
       display: flex;
       align-items: center;
-      justify-content: flex-end;
+      justify-content: center;
       gap: 1rem;
-      flex: 1;
+      flex: 1 1 0;
     }
 
-    /* ═══════════════════════════════════════
-       بحث — مطابق لميم
-    ═══════════════════════════════════════ */
+    .navbar_search {
+      margin: 0;
+    }
+
     .navbar_search-wrapper {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 0;
+      justify-content: center;
+      gap: 0.35rem;
     }
-    #search-input {
-      width: 160px;
-      padding: 0.3rem 0.65rem;
-      background: var(--search-bg);
-      border: 1px solid var(--search-border);
-      border-radius: 5px 0 0 5px;
-      color: var(--fg);
-      font-family: 'Noto Sans Arabic', sans-serif;
-      font-size: 0.75rem;
+
+    .navbar_search-input {
+      width: 11rem;
+      height: 1.5rem;
+      margin: 0;
+      padding: 0 0.625rem;
+      border: 1px solid var(--theme-text);
+      border-radius: var(--radius);
+      background-color: var(--search-bg);
+      color: var(--theme-text);
       outline: none;
-      direction: rtl;
-      transition: border-color 0.2s, background 0.3s;
+      transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
     }
-    #search-input::placeholder { color: var(--muted); opacity: 0.7; }
-    #search-input:focus { border-color: var(--muted); }
-    #search-count {
-      font-size: 0.63rem;
+
+    .navbar_search-input::placeholder {
       color: var(--muted);
-      padding: 0 0.35rem;
-      min-width: 2.5rem;
+      opacity: 1;
+    }
+
+    .navbar_search-input:focus {
+      border-color: var(--theme-text);
+    }
+
+    .navbar_search-count {
+      min-height: 0.9rem;
+      font-size: 0.72rem;
+      line-height: 1;
+      color: var(--muted);
       text-align: center;
     }
-    mark.search-hit {
-      background: var(--highlight);
-      color: var(--fg);
-      border-radius: 2px;
-      padding: 0 1px;
-    }
-    mark.search-hit.current { outline: 1px solid var(--muted); }
 
-    /* ═══════════════════════════════════════
-       تبديل الوضع الليلي — مطابق لميم حرفيًا
-    ═══════════════════════════════════════ */
     .navbar_mode-wrapper {
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 0.5rem;
-      cursor: pointer;
+      color: var(--theme-text);
       text-decoration: none;
-      color: var(--fg);
-      direction: rtl;        /* النص على اليمين، الـ pill على اليسار */
-      flex-shrink: 0;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      white-space: nowrap;
     }
 
     .navbar_mode-text {
-      font-size: 0.8rem;
+      padding: 0;
+      font-size: 0.875rem;
       font-weight: 400;
-      white-space: nowrap;
-      color: var(--fg);
-      transition: color 0.3s;
+      line-height: 1;
+      text-align: right;
     }
 
     .navbar_mode-button-wrapper {
-      width: 40px;
-      height: 20px;
-      border-radius: 999px;
-      border: 1.5px solid var(--fg);
-      background-color: #cdd3d6;
       position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      width: 2rem;
+      height: 1rem;
+      padding-left: 3px;
+      padding-right: 3px;
+      border: 1px solid #000;
+      border-radius: 10px;
+      background-color: #d9d9d9;
       flex-shrink: 0;
-      transition: background-color 0.3s, border-color 0.3s;
-      overflow: hidden;
+      direction: ltr;
+      transition: background-color 0.28s ease, border-color 0.28s ease;
+    }
+
+    body.dark .navbar_mode-button-wrapper {
+      border-color: var(--whitesh);
+      background-color: rgba(226, 249, 253, 0.18);
     }
 
     .navbar_mode-button {
       position: absolute;
-      top: 2px;
-      right: 2px;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: #261a0b;
-      transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-      transform: translateX(0%);     /* الوضع النهاري: الكرة على اليمين */
+      width: 0.625rem;
+      height: 0.625rem;
+      border-radius: 4px;
+      background-color: #000;
+      right: 3px;
+      transform: translateX(var(--theme-toggle-shift));
+      transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.28s ease;
     }
 
-    /* الوضع الليلي: الكرة تنزلق إلى اليسار */
-    .dark-mode .navbar_mode-button {
-      transform: translateX(-110%);
+    body.dark .navbar_mode-button {
+      background-color: var(--whitesh);
     }
 
-    /* ═══════════════════════════════════════
-       همبرجر — مطابق لميم (خطان فقط)
-    ═══════════════════════════════════════ */
     .navbar_menu-button {
-      display: none;         /* يظهر على الجوال فقط */
-      flex-direction: column;
-      gap: 5px;
-      background: none;
-      border: none;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 2.2rem;
+      height: 2.2rem;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--theme-text);
       cursor: pointer;
-      padding: 2px;
       flex-shrink: 0;
     }
-    .menu_icon-line {
-      display: block;
-      width: 20px;
-      height: 2px;
-      background: var(--fg);
-      border-radius: 2px;
-      transition: background 0.3s;
+
+    .navbar_menu-icon {
+      width: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.32rem;
     }
 
-    /* ═══════════════════════════════════════
-       شريط التقدم — أسفل الـ topbar مطابق لميم
-    ═══════════════════════════════════════ */
-    .navbar_line-scroll-wrapper {
+    .navbar_menu-icon span {
       width: 100%;
-      height: 2px;
-      background: transparent;
-    }
-    .navbar_line-scroll {
-      height: 2px;
-      width: 0%;
-      background: var(--fg);
-      opacity: 0.35;
-      transition: width 0.08s linear;
-      will-change: width;
+      height: 1.5px;
+      border-radius: 99px;
+      background: currentColor;
+      transition: transform 0.2s ease, opacity 0.2s ease;
     }
 
-    /* ══════════════════════════════════════
-       المحتوى الرئيسي
-    ══════════════════════════════════════ */
-    main {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 5.5rem 2rem 10rem;
+    .mobile-panel {
+      display: none;
+      border-top: 1px solid var(--rule);
+      padding: 0 0 1rem;
     }
 
-    /* ── صورة Hero ── */
+    .mobile-panel.is-open {
+      display: block;
+    }
+
+    .mobile-panel-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+      padding-top: 1rem;
+    }
+
+    .mobile-panel .mobile-search {
+      display: none;
+    }
+
+    .mobile-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .mobile-link {
+      font-size: 0.95rem;
+      color: var(--theme-text);
+      opacity: 0.92;
+    }
+
+    .article-shell {
+      width: 100%;
+      max-width: 64rem;
+      margin-inline: auto;
+      padding: 2rem 2rem 7rem;
+    }
+
     .hero-figure {
-      position: relative;
-      margin: 0 0 2.8rem;
-      border-radius: 10px;
+      margin: 0 0 2.5rem;
       overflow: hidden;
-      line-height: 0;
-      box-shadow: 0 4px 28px rgba(0,0,0,0.12);
+      border-radius: 0.75rem;
+      background: var(--theme-card-bg);
+      border: 1px solid var(--theme-card-border);
+      transition: background-color 0.28s ease, border-color 0.28s ease;
     }
+
     .hero-figure img {
       width: 100%;
       height: auto;
-      display: block;
-      border-radius: 10px;
+      aspect-ratio: 16 / 8.9;
+      object-fit: cover;
     }
 
-    /* ── رأس المقالة ── */
-    header { margin-bottom: 1.6rem; text-align: center; }
+    .article-header {
+      text-align: center;
+      margin-bottom: 1.75rem;
+    }
 
-    h1 {
-      font-size: 2.2rem;
+    .article-title {
+      margin: 0 0 0.5rem;
+      color: var(--theme-text);
+      font-family: "Comm Lyon Arabic Text", "Noto Sans Arabic", serif;
+      font-size: clamp(2rem, 4vw, 3.4rem);
       font-weight: 900;
-      line-height: 1.25;
-      margin-bottom: 0.45rem;
+      line-height: 1.18;
+      letter-spacing: -0.02em;
     }
 
-    .subtitle {
-      font-size: 1.05rem;
-      font-weight: 400;
+    .article-subtitle {
+      max-width: 46rem;
+      margin: 0 auto 1rem;
       color: var(--muted);
-      line-height: 1.8;
-      margin-bottom: 1rem;
+      font-size: 1.02rem;
+      font-weight: 400;
+      line-height: 1.9;
     }
 
     .article-meta {
@@ -315,319 +415,556 @@
       justify-content: center;
       gap: 1.2rem;
       flex-wrap: wrap;
-      direction: rtl;
-    }
-    .meta-item {
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-      font-size: 0.78rem;
-      color: var(--muted);
-      font-weight: 400;
-    }
-    .meta-item svg {
-      width: 13px; height: 13px;
-      stroke: var(--muted);
-      fill: none;
-      flex-shrink: 0;
-      opacity: 0.75;
     }
 
-    /* ── محتوى المقالة ── */
-    hr.divider { border: none; border-top: 1px solid var(--rule); margin: 2.6rem 0; }
-    section { margin-bottom: 0; }
-    h2 { font-size: 1.05rem; font-weight: 900; margin-bottom: 1.2rem; line-height: 1.55; }
-    p  { font-size: 0.98rem; font-weight: 400; line-height: 2; margin-bottom: 1rem; }
-    p:last-child { margin-bottom: 0; }
-    strong { font-weight: 500; }
+    .meta-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 400;
+      line-height: 1;
+    }
+
+    .meta-item svg {
+      width: 13px;
+      height: 13px;
+      stroke: currentColor;
+      fill: none;
+      opacity: 0.75;
+      flex-shrink: 0;
+    }
+
+    .divider {
+      border: 0;
+      border-top: 1px solid var(--rule);
+      margin: 2.5rem 0;
+    }
+
+    .article-body {
+      color: var(--theme-text);
+    }
+
+    .article-body section {
+      margin: 0;
+    }
+
+    .article-body h2 {
+      margin: 0 0 1.2rem;
+      font-family: "Comm Lyon Arabic Text", "Noto Sans Arabic", serif;
+      font-size: 1.12rem;
+      font-weight: 700;
+      line-height: 1.6;
+    }
+
+    .article-body p {
+      margin: 0 0 1rem;
+      font-size: 0.98rem;
+      font-weight: 400;
+      line-height: 2;
+    }
+
+    .article-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .article-body strong {
+      font-weight: 500;
+    }
+
+    .sub-heading {
+      margin-top: 1.5rem;
+      margin-bottom: 0.45rem;
+      font-size: 0.93rem;
+      font-weight: 500;
+      line-height: 1.8;
+    }
 
     blockquote {
       margin: 1.8rem 0;
-      padding: 1rem 1.3rem;
-      background: var(--blockquote-bg);
-      border-right: 3px solid var(--blockquote-border);
-      border-radius: 0 4px 4px 0;
-      transition: background 0.3s, border-color 0.3s;
+      padding: 1rem 1.25rem;
+      background: var(--theme-card-bg);
+      border: 1px solid var(--theme-card-border);
+      border-right: 2px solid var(--theme-text);
+      border-radius: 0.5rem;
+      transition: background-color 0.28s ease, border-color 0.28s ease, color 0.28s ease;
     }
-    blockquote p { font-size: 0.95rem; line-height: 1.85; margin-bottom: 0; }
 
-    .sub-heading { font-weight: 500; font-size: 0.93rem; margin-top: 1.5rem; margin-bottom: 0.45rem; }
+    blockquote p {
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.9;
+    }
 
-    /* ── تذييل ── */
-    footer {
+    footer.site-footer {
       margin-top: 5rem;
       padding-top: 1.5rem;
       border-top: 1px solid var(--rule);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 0.75rem;
       flex-wrap: wrap;
-      gap: 0.4rem;
     }
-    .byline { font-size: 0.82rem; color: var(--muted); font-style: normal; }
+
+    .byline {
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-style: normal;
+    }
+
     .x-link {
-      display: flex; align-items: center; justify-content: center;
-      opacity: 0.4; transition: opacity 0.2s;
-      text-decoration: none; color: var(--muted); flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.45;
+      transition: opacity 0.2s ease;
+      color: var(--theme-text);
     }
-    .x-link:hover { opacity: 0.8; }
-    .x-link svg { width: 20px; height: 20px; fill: var(--muted); transition: fill 0.3s; }
 
-    /* ══════════════════════════════════════
-       الجوال — مطابق لميم
-    ══════════════════════════════════════ */
-    @media (max-width: 767px) {
-      html { font-size: 15px; }
-      main { padding: 4.8rem 1.3rem 8rem; }
-      h1   { font-size: 1.65rem; }
+    .x-link:hover {
+      opacity: 0.8;
+    }
 
-      #topbar-inner {
-        padding: 0 1rem;
-        height: 56px;
+    .x-link svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    mark.search-hit {
+      background: var(--highlight);
+      color: inherit;
+      border-radius: 2px;
+      padding: 0 1px;
+    }
+
+    mark.search-hit.current {
+      outline: 1px solid var(--theme-text);
+      outline-offset: 1px;
+    }
+
+    .hide-tablet {
+      display: block;
+    }
+
+    @media screen and (max-width: 991px) {
+      .padding-global {
+        padding-inline: 1.25rem;
       }
 
-      /* على الجوال: إخفاء البحث والنص فقط في التبديل */
-      .navbar_search-wrapper { display: none; }
-      .navbar_mode-text      { display: none; }
+      .navbar_wrapper {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+      }
 
-      /* إظهار الهمبرجر */
-      .navbar_menu-button { display: flex; }
+      .navbar_logo {
+        width: 3rem;
+      }
 
-      /* حجم اللوجو على الجوال */
-      .logo-img { height: 35px; }
+      .hide-tablet,
+      .navbar_search {
+        display: none !important;
+      }
+
+      .navbar_menu-wrapper {
+        display: none;
+      }
+
+      .navbar_tools-wrapper {
+        gap: 0.75rem;
+        flex: 0 0 auto;
+      }
+
+      .navbar_menu-button {
+        display: inline-flex;
+      }
+
+      .mobile-panel .mobile-search {
+        display: block;
+      }
+
+      .mobile-panel .navbar_search,
+      .mobile-panel .navbar_search-wrapper {
+        display: flex !important;
+      }
+
+      .mobile-panel .navbar_search-input {
+        width: 100%;
+        max-width: none;
+        height: 2.25rem;
+      }
+
+      .article-shell {
+        padding: 1.5rem 1.25rem 5rem;
+      }
     }
 
-    /* إخفاء الهمبرجر على الديسكتوب */
-    @media (min-width: 768px) {
-      .navbar_menu-button { display: none; }
+    @media screen and (max-width: 767px) {
+      .padding-global {
+        padding-inline: 1rem;
+      }
+
+      .article-shell {
+        padding: 1.25rem 1rem 4rem;
+      }
+
+      .hero-figure {
+        margin-bottom: 2rem;
+        border-radius: 0.6rem;
+      }
+
+      .article-title {
+        font-size: clamp(1.8rem, 9vw, 2.35rem);
+      }
+
+      .article-subtitle {
+        font-size: 0.96rem;
+      }
+
+      footer.site-footer {
+        align-items: flex-start;
+        flex-direction: column;
+      }
     }
   </style>
 </head>
 <body>
+  <div class="page-wrapper">
 
-  <!-- ════════════════════════════════════════
-       شريط التنقل — هيكل ميم الدقيق
-  ════════════════════════════════════════ -->
-  <div id="topbar">
-    <div id="topbar-inner">
+    <header class="navbar">
+      <div class="padding-global">
+        <div class="container-large nav-container">
+          <div class="navbar_wrapper">
 
-      <!-- الجانب الأيمن: روابط التنقل (فارغ لأن مآلات ليس لها روابط) -->
-      <nav class="navbar_links">
-        <!-- يمكن إضافة روابط هنا لاحقًا -->
-      </nav>
+            <nav class="navbar_menu-wrapper" aria-label="التنقل الرئيسي">
+              <!-- ضع روابطك هنا -->
+              <!-- مثال:
+              <a href="/" class="navbar_link">رابطك الأول</a>
+              <a href="/articles" class="navbar_link">رابطك الثاني</a>
+              <a href="/about" class="navbar_link">رابطك الثالث</a>
+              -->
+            </nav>
 
-      <!-- الوسط: اللوجو -->
-      <a href="/" class="navbar_logo">
-        <img src="malat2.png" alt="مآلات" class="logo-img" />
-      </a>
+            <a href="/" class="navbar_logo-wrap" aria-label="الرئيسية">
+              <div class="navbar_logo">
+                <img src="malat2.png" alt="مآلات" />
+              </div>
+            </a>
 
-      <!-- الجانب الأيسر: الأدوات -->
-      <div class="navbar_tools-wrapper">
+            <div class="navbar_tools-wrapper">
+              <form class="navbar_search hide-tablet" action="#" onsubmit="return false;">
+                <div class="navbar_search-wrapper">
+                  <input
+                    class="navbar_search-input"
+                    id="navbar-search"
+                    type="search"
+                    name="query"
+                    maxlength="256"
+                    placeholder="أبحث هنا .."
+                    autocomplete="off"
+                  />
+                  <div class="navbar_search-count" id="search-count"></div>
+                </div>
+              </form>
 
-        <!-- حقل البحث (يخفى على الجوال) -->
-        <div class="navbar_search-wrapper">
-          <input type="text" id="search-input" placeholder="أبحث هنا .." autocomplete="off" />
-          <div id="search-count"></div>
-        </div>
+              <a href="#" class="navbar_mode-wrapper" id="dark-mode-toggle" aria-label="تبديل الوضع الليلي">
+                <div class="navbar_mode-text">الوضع الليلي</div>
+                <div class="navbar_mode-button-wrapper">
+                  <div class="navbar_mode-button" id="navbar_mode-button"></div>
+                </div>
+              </a>
 
-        <!-- تبديل الوضع الليلي — مطابق لميم حرفيًا -->
-        <a href="#" class="navbar_mode-wrapper" id="dark-mode-toggle" aria-label="تبديل الوضع الليلي">
-          <div class="navbar_mode-text">الوضع الليلي</div>
-          <div class="navbar_mode-button-wrapper">
-            <div class="navbar_mode-button" id="navbar_mode-button"></div>
+              <button class="navbar_menu-button" id="menu-button" aria-label="فتح القائمة" aria-expanded="false">
+                <span class="navbar_menu-icon" aria-hidden="true">
+                  <span></span>
+                  <span></span>
+                </span>
+              </button>
+            </div>
           </div>
-        </a>
 
-        <!-- همبرجر — مطابق لميم (خطان) -->
-        <button class="navbar_menu-button" aria-label="القائمة">
-          <div class="menu_icon-line"></div>
-          <div class="menu_icon-line"></div>
-        </button>
+          <div class="mobile-panel" id="mobile-panel">
+            <div class="mobile-panel-inner">
+              <form class="navbar_search mobile-search" action="#" onsubmit="return false;">
+                <div class="navbar_search-wrapper">
+                  <input
+                    class="navbar_search-input"
+                    id="navbar-search-mobile"
+                    type="search"
+                    name="query-mobile"
+                    maxlength="256"
+                    placeholder="أبحث هنا .."
+                    autocomplete="off"
+                  />
+                  <div class="navbar_search-count" id="search-count-mobile"></div>
+                </div>
+              </form>
 
-      </div>
-    </div>
-
-    <!-- شريط التقدم — أسفل الـ topbar مثل ميم -->
-    <div class="navbar_line-scroll-wrapper">
-      <div class="navbar_line-scroll" id="progress-bar"></div>
-    </div>
-  </div>
-
-  <!-- ════════════════════════════════════════
-       المحتوى الرئيسي
-  ════════════════════════════════════════ -->
-  <main>
-
-    <figure class="hero-figure" aria-label="صورة توضيحية">
-      <img
-        src="https://www.stimson.org/wp-content/uploads/2024/07/Middle-East-Soldiers-on-Map.jpg"
-        alt="جنود على خريطة الشرق الأوسط"
-        loading="eager"
-      />
-    </figure>
-
-    <header>
-      <h1>ما تراه ليس حربًا</h1>
-      <p class="subtitle">قراءة في بنية القوة العالمية وإعادة تشكيل الشرق الأوسط</p>
-      <div class="article-meta">
-        <span class="meta-item">
-          <svg viewBox="0 0 24 24" stroke-width="1.7" xmlns="http://www.w3.org/2000/svg">
-            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-            <line x1="16" y1="2" x2="16" y2="6"/>
-            <line x1="8"  y1="2" x2="8"  y2="6"/>
-            <line x1="3"  y1="10" x2="21" y2="10"/>
-          </svg>
-          2026-03-31
-        </span>
-        <span class="meta-item">
-          <svg viewBox="0 0 24 24" stroke-width="1.7" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="12" cy="12" r="9"/>
-            <polyline points="12 7 12 12 15 15"/>
-          </svg>
-          قراءة ١٥ دقيقة
-        </span>
+              <nav class="mobile-links" aria-label="القائمة">
+                <!-- ضع روابطك هنا -->
+                <!-- مثال:
+                <a href="/" class="mobile-link">رابطك الأول</a>
+                <a href="/articles" class="mobile-link">رابطك الثاني</a>
+                <a href="/about" class="mobile-link">رابطك الثالث</a>
+                -->
+              </nav>
+            </div>
+          </div>
+        </div>
       </div>
     </header>
 
-    <!-- ضع محتوى المقال هنا -->
+    <main class="article-shell">
+      <figure class="hero-figure" aria-label="صورة توضيحية">
+        <img
+          src="https://www.stimson.org/wp-content/uploads/2024/07/Middle-East-Soldiers-on-Map.jpg"
+          alt="جنود على خريطة الشرق الأوسط"
+          loading="eager"
+        />
+      </figure>
 
-    <footer>
-      <span class="byline">Compiled and Adapted by Mohammed Al-Otaibi</span>
-      <a href="https://x.com/YOUR_X_HANDLE" target="_blank" rel="noopener noreferrer" class="x-link" aria-label="X">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.741l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-7.731zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-        </svg>
-      </a>
-    </footer>
+      <header class="article-header">
+        <h1 class="article-title">ما تراه ليس حربًا</h1>
+        <p class="article-subtitle">قراءة في بنية القوة العالمية وإعادة تشكيل الشرق الأوسط</p>
 
-  </main>
+        <div class="article-meta">
+          <span class="meta-item">
+            <svg viewBox="0 0 24 24" stroke-width="1.7" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            2026-03-31
+          </span>
 
-  <!-- ════════════════════════════════════════
-       JavaScript — منطق ميم الدقيق
-  ════════════════════════════════════════ -->
+          <span class="meta-item">
+            <svg viewBox="0 0 24 24" stroke-width="1.7" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="9"></circle>
+              <polyline points="12 7 12 12 15 15"></polyline>
+            </svg>
+            قراءة ١٥ دقيقة
+          </span>
+        </div>
+      </header>
+
+      <hr class="divider" />
+
+      <article class="article-body" id="article-content">
+        <!-- ضع محتوى مقالك هنا -->
+        <!-- أمثلة بنيوية فقط، احذفها واستبدلها بنصك -->
+        <section>
+          <h2>عنوان فرعي</h2>
+          <p>ضع هنا الفقرة الأولى من مقالك.</p>
+          <p>ضع هنا الفقرة الثانية من مقالك.</p>
+
+          <blockquote>
+            <p>ضع هنا الاقتباس الذي تريد إبرازه داخل المقال.</p>
+          </blockquote>
+
+          <p class="sub-heading">عنوان داخلي صغير</p>
+          <p>ضع هنا فقرة إضافية تحت العنوان الداخلي.</p>
+        </section>
+      </article>
+
+      <footer class="site-footer">
+        <span class="byline">Compiled and Adapted by Mohammed Al-Otaibi</span>
+
+        <a href="https://x.com/YOUR_X_HANDLE" target="_blank" rel="noopener noreferrer" class="x-link" aria-label="X">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.741l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-7.731zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
+          </svg>
+        </a>
+      </footer>
+    </main>
+  </div>
+
   <script>
-    /* ── إزالة إخفاء الصفحة بعد التحميل ── */
-    window.addEventListener('load', function () {
-      document.body.classList.remove('hidden');
-    });
+    const body = document.body;
+    const darkToggle = document.getElementById('dark-mode-toggle');
+    const menuButton = document.getElementById('menu-button');
+    const mobilePanel = document.getElementById('mobile-panel');
 
-    /* ════════════════════════════════
-       الوضع الليلي — مطابق لميم تمامًا
-       (localStorage + dark-mode class)
-    ════════════════════════════════ */
-    var body = document.body;
+    const desktopInput = document.getElementById('navbar-search');
+    const mobileInput = document.getElementById('navbar-search-mobile');
+    const desktopCount = document.getElementById('search-count');
+    const mobileCount = document.getElementById('search-count-mobile');
+    const articleContent = document.getElementById('article-content');
 
-    /* تطبيق الوضع المحفوظ فور تحميل الـ DOM */
-    if (localStorage.getItem('darkMode') === 'enabled') {
-      body.classList.add('dark-mode');
+    let originalHTML = articleContent.innerHTML;
+    let hits = [];
+    let currentHit = 0;
+    let activeQuery = '';
+
+    function setTheme(isDark) {
+      body.classList.toggle('dark', isDark);
+      localStorage.setItem('malat-theme', isDark ? 'dark' : 'light');
     }
-    document.documentElement.classList.remove('dark-mode-preload');
 
-    document.addEventListener('DOMContentLoaded', function () {
-      var toggleBtn = document.getElementById('dark-mode-toggle');
+    function toggleTheme(event) {
+      if (event) event.preventDefault();
+      setTheme(!body.classList.contains('dark'));
+    }
 
-      toggleBtn.addEventListener('click', function (e) {
-        e.preventDefault();
-        if (body.classList.contains('dark-mode')) {
-          body.classList.remove('dark-mode');
-          localStorage.setItem('darkMode', 'disabled');
-        } else {
-          body.classList.add('dark-mode');
-          localStorage.setItem('darkMode', 'enabled');
-        }
-      });
-    });
-
-    /* ════════════════════════════════
-       شريط التقدم — أسفل الـ topbar مثل ميم
-    ════════════════════════════════ */
-    var progressBar = document.getElementById('progress-bar');
-    var ticking = false;
-
-    window.addEventListener('scroll', function () {
-      if (!ticking) {
-        requestAnimationFrame(function () {
-          var y = window.scrollY;
-          var h = document.documentElement.scrollHeight - window.innerHeight;
-          if (h > 0) {
-            progressBar.style.width = Math.min((y / h) * 100, 100) + '%';
-          }
-          ticking = false;
-        });
-        ticking = true;
+    function initTheme() {
+      const saved = localStorage.getItem('malat-theme');
+      if (saved === 'dark') {
+        setTheme(true);
       }
-    }, { passive: true });
-
-    /* ════════════════════════════════
-       البحث — مطابق لمآلات الأصلي
-    ════════════════════════════════ */
-    var searchInput = document.getElementById('search-input');
-    var countEl     = document.getElementById('search-count');
-    var hits = [], cur = 0, searchTimer;
-    var mainEl = document.querySelector('main');
-    var originalHTML = '';
-
-    document.addEventListener('DOMContentLoaded', function () {
-      originalHTML = mainEl.innerHTML;
-    });
-    if (document.readyState !== 'loading') {
-      originalHTML = mainEl.innerHTML;
     }
 
-    function clearHL() {
-      mainEl.innerHTML = originalHTML;
-      hits = []; cur = 0; countEl.textContent = '';
+    function toggleMobileMenu() {
+      const isOpen = mobilePanel.classList.toggle('is-open');
+      menuButton.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     }
 
-    function doSearch(q) {
-      clearHL();
-      if (!q.trim()) return;
-      var re = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
-      var walker = document.createTreeWalker(mainEl, NodeFilter.SHOW_TEXT);
-      var nodes = [];
-      while (walker.nextNode()) nodes.push(walker.currentNode);
-      nodes.forEach(function (node) {
-        var text = node.textContent;
-        re.lastIndex = 0;
-        if (!re.test(text)) return;
-        re.lastIndex = 0;
-        var frag = document.createDocumentFragment();
-        var last = 0, m;
-        while ((m = re.exec(text)) !== null) {
-          if (m.index > last) frag.appendChild(document.createTextNode(text.slice(last, m.index)));
-          var mark = document.createElement('mark');
-          mark.className = 'search-hit';
-          mark.textContent = m[0];
-          frag.appendChild(mark);
-          hits.push(mark);
-          last = re.lastIndex;
-        }
-        if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
-        node.parentNode.replaceChild(frag, node);
-      });
-      if (hits.length) {
-        hits[0].classList.add('current');
-        hits[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
-        countEl.textContent = '١ من ' + hits.length;
-      } else {
+    function resetSearchState() {
+      articleContent.innerHTML = originalHTML;
+      hits = [];
+      currentHit = 0;
+    }
+
+    function updateCountDisplay(countEl, current, total) {
+      if (!countEl) return;
+      if (!activeQuery.trim()) {
+        countEl.textContent = '';
+        return;
+      }
+      if (!total) {
         countEl.textContent = 'لا نتائج';
+        return;
+      }
+      countEl.textContent = `${current} من ${total}`;
+    }
+
+    function scrollToCurrentHit() {
+      if (!hits.length) return;
+      hits[currentHit].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function setCurrentHit(index) {
+      if (!hits.length) return;
+
+      hits.forEach(hit => hit.classList.remove('current'));
+      currentHit = index;
+      hits[currentHit].classList.add('current');
+      scrollToCurrentHit();
+
+      updateCountDisplay(desktopCount, currentHit + 1, hits.length);
+      updateCountDisplay(mobileCount, currentHit + 1, hits.length);
+    }
+
+    function escapeRegExp(text) {
+      return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    function performSearch(query) {
+      activeQuery = query;
+      resetSearchState();
+
+      if (!query.trim()) {
+        updateCountDisplay(desktopCount, 0, 0);
+        updateCountDisplay(mobileCount, 0, 0);
+        return;
+      }
+
+      const regex = new RegExp(escapeRegExp(query), 'gi');
+      const walker = document.createTreeWalker(articleContent, NodeFilter.SHOW_TEXT);
+      const nodes = [];
+
+      while (walker.nextNode()) {
+        nodes.push(walker.currentNode);
+      }
+
+      nodes.forEach(node => {
+        const parentTag = node.parentNode && node.parentNode.nodeName;
+        if (!node.textContent.trim()) return;
+        if (['SCRIPT', 'STYLE', 'MARK'].includes(parentTag)) return;
+
+        const text = node.textContent;
+        regex.lastIndex = 0;
+        if (!regex.test(text)) return;
+
+        regex.lastIndex = 0;
+        const fragment = document.createDocumentFragment();
+        let lastIndex = 0;
+        let match;
+
+        while ((match = regex.exec(text)) !== null) {
+          if (match.index > lastIndex) {
+            fragment.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+          }
+
+          const mark = document.createElement('mark');
+          mark.className = 'search-hit';
+          mark.textContent = match[0];
+          fragment.appendChild(mark);
+          hits.push(mark);
+
+          lastIndex = regex.lastIndex;
+        }
+
+        if (lastIndex < text.length) {
+          fragment.appendChild(document.createTextNode(text.slice(lastIndex)));
+        }
+
+        node.parentNode.replaceChild(fragment, node);
+      });
+
+      if (hits.length) {
+        setCurrentHit(0);
+      } else {
+        updateCountDisplay(desktopCount, 0, 0);
+        updateCountDisplay(mobileCount, 0, 0);
       }
     }
 
-    if (searchInput) {
-      searchInput.addEventListener('input', function () {
-        clearTimeout(searchTimer);
-        searchTimer = setTimeout(function () { doSearch(searchInput.value); }, 280);
+    function syncSearchInputs(source, target) {
+      if (!source || !target) return;
+      target.value = source.value;
+    }
+
+    function bindSearch(inputEl, countEl, siblingInput) {
+      if (!inputEl) return;
+
+      let timer;
+
+      inputEl.addEventListener('input', () => {
+        clearTimeout(timer);
+        if (siblingInput) siblingInput.value = inputEl.value;
+
+        timer = setTimeout(() => {
+          performSearch(inputEl.value);
+          if (!inputEl.value.trim()) countEl.textContent = '';
+        }, 220);
       });
-      searchInput.addEventListener('keydown', function (e) {
+
+      inputEl.addEventListener('keydown', (e) => {
         if (e.key !== 'Enter' || !hits.length) return;
-        hits[cur].classList.remove('current');
-        cur = (cur + 1) % hits.length;
-        hits[cur].classList.add('current');
-        hits[cur].scrollIntoView({ behavior: 'smooth', block: 'center' });
-        countEl.textContent = (cur + 1) + ' من ' + hits.length;
+        e.preventDefault();
+        setCurrentHit((currentHit + 1) % hits.length);
       });
     }
+
+    darkToggle.addEventListener('click', toggleTheme);
+
+    if (menuButton) {
+      menuButton.addEventListener('click', toggleMobileMenu);
+    }
+
+    bindSearch(desktopInput, desktopCount, mobileInput);
+    bindSearch(mobileInput, mobileCount, desktopInput);
+
+    initTheme();
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 991 && mobilePanel.classList.contains('is-open')) {
+        mobilePanel.classList.remove('is-open');
+        menuButton.setAttribute('aria-expanded', 'false');
+      }
+    });
   </script>
 </body>
 </html>
